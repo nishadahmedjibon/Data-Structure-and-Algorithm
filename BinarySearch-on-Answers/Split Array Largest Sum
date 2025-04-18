@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int count(vector<int>& nums, int mid)
+    {
+        int size= nums.size();
+        int sum=0, need=1;
+        for(int i=0; i<size; i++)
+        {
+            if(nums[i]+sum <= mid)
+            {
+                sum+=nums[i];
+            }
+            else
+                {
+                    need++;
+                    sum=nums[i];
+                }
+        }
+        return need;
+    }
+    int splitArray(vector<int>& nums, int k) {
+        int low=*max_element(nums.begin(), nums.end());
+        int  high= accumulate(nums.begin(), nums.end(), 0);
+        while(low<=high)
+        {
+            int mid=(low+high)/2;
+            if(count(nums, mid)>k)
+                low=mid+1;
+            else 
+                high=mid-1;
+        }
+        return low;
+    }
+};
