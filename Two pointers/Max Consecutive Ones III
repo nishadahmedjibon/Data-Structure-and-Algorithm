@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+/* Brute Force method. TC- O(n*n), SC- O(1)
+int longestOnes(vector<int>& nums, int k)
+{
+    int zeros=0, maxlen=0, len=0;
+    for(int i=0; i<nums.size(); i++)
+    {
+        for(int j=i; j<nums.size(); j++)
+        {
+            if(nums[j]==0)
+                zeros++;
+            if(zeros<=k)
+            {
+                maxlen=max(j-i+1, maxlen);
+            }
+            else if(zeros>k)
+                break;
+        }
+        zeros=0;
+    }
+    return maxlen;
+}
+*/
+
+/* Better Approach, TC: O(2n), SC: O(1)
+int longestOnes(vector<int>& nums, int k)
+{
+    int maxlen=0, zeros=0, l=0, r=0;
+    while(r<nums.size())
+    {
+        if(nums[r]==0)
+            zeros++;
+        if(zeros<=k)
+            maxlen=max(maxlen, r-l+1);
+        while(zeros>k)
+        {
+            if(nums[l]==0)
+            {
+                zeros--;
+            }
+            l++;
+        }
+        r++;
+
+    }
+    return maxlen;
+}*/
+
+//Best Optimal Solution, using two pointers alg. TC: O(n), SC: O(1)
+int longestOnes(vector<int>& nums, int k)
+{
+    int maxlen=0, zeros=0, l=0, r=0;
+    while(r<nums.size())
+    {
+        if(nums[r]==0)
+            zeros++;
+        if(zeros<=k)
+        {
+            maxlen=max(maxlen, r-l+1);
+        }
+        if(zeros>k)
+        {
+            if(nums[l]==0)
+                zeros--;
+            l++;
+        }
+        r++;
+    }
+    return maxlen;
+}
+
+int main()
+{
+
+    vector<int> nums= {1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0};
+    int k=2;
+
+    cout<<longestOnes(nums, k);
+
+    //output: 6
+}
