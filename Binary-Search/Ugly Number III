@@ -1,0 +1,51 @@
+/*
+This solution finds the n-th positive integer divisible by at least one of the given integers
+a, b, or c using a binary search on the answer. Instead of generating all such numbers, 
+it counts how many numbers are ≤ mid using the inclusion-exclusion principle: summing the counts divisible by a, b, and c, 
+subtracting counts divisible by pairwise LCMs (lcm(a,b), lcm(b,c), lcm(a,c)), and 
+adding back the count divisible by lcm(a,b,c) to avoid double-counting. The LCMs are computed using GCD, 
+with __int128 used to safely handle large multiplications. Binary search is applied over the 
+range [1, n * min(a, b, c)], updating low and high based on the count until convergence. 
+This approach achieves O(log(n * min(a,b,c))) time complexity with O(1) space, efficiently finding the n-th ugly number 
+without generating the entire sequence.
+*/
+
+problem link: https://leetcode.com/problems/ugly-number-iii/?envType=problem-list-v2&envId=binary-search
+
+class Solution {
+public:
+    long long gcd(long long x, long long y) {
+        return y == 0 ? x : gcd(y, x % y);
+    }
+
+    long long lcm(long long x, long long y, long long limit) {
+        long long g = gcd(x, y);
+        __int128 res = (__int128)x / g * y;  
+        if (res > limit) 
+            return limit + 1;  
+        return (long long)res;
+    }
+
+    long long count(long long k, long long a, long long b, long long c) {
+        long long ab = lcm(a, b, k);
+        long long bc = lcm(b, c, k);
+        long long ac = lcm(a, c, k);
+        long long abc = lcm(ab, c, k);
+
+        return k/a + k/b + k/c 
+             - k/ab - k/bc - k/ac 
+             + k/abc;
+    }
+
+    int nthUglyNumber(int n, int a, int b, int c) {
+        long long low = 1, high = 1LL * min({a, b, c}) * n;
+        while (low < high) {
+            long long mid = (low + high) / 2;
+            if (count(mid, a, b, c) >= n)
+                high = mid;
+            else
+                low = mid + 1;
+        }
+        return (int)low;
+    }
+};
