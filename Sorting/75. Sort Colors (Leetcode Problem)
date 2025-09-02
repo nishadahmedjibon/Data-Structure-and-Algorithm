@@ -1,0 +1,25 @@
+Problem link: https://leetcode.com/problems/sort-colors/description/?envType=problem-list-v2&envId=two-pointers
+
+class Solution {
+public:
+void bubble_sort(vector<int>& arr, int n) {
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = 0; j <= i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j + 1];
+                arr[j + 1] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+
+    //cout << "After Using bubble sort: " << "\n";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    //cout << "\n";
+}
+    void sortColors(vector<int>& nums) {
+        bubble_sort(nums, nums.size());
+    }
+};
